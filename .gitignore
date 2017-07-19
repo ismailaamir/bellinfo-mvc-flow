@@ -6,3 +6,101 @@ bin
 *.rar
 .settings
 target
+
+package com.aamir.strutstospring;
+
+import static org.junit.Assert.*;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.aamir.strutstospring.beans.Response;
+import com.aamir.strutstospring.beans.UserForm;
+import com.aamir.strutstospring.beans.UserRole;
+import com.aamir.strutstospring.commons.RollupException;
+import com.aamir.strutstospring.commons.RollupRepository;
+import com.aamir.strutstospring.commons.UIConstants;
+import com.aamir.strutstospring.controller.HomeController;
+import com.aamir.strutstospring.service.LoginService;
+import com.aamir.strutstospring.service.RLRunMgmtService;
+
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.*;
+import org.mockito.runners.MockitoJUnitRunner;
+import com.aamir.strutstospring.commons.UIConstants;
+
+
+@RunWith(MockitoJUnitRunner.class)
+public class UserServiceTest {
+	@Mock RLRunMgmtService rlRunMgmtService;
+	@Mock UserRole userRole;
+	@Mock UserForm userForm;
+	@Mock Response response;
+	
+
+	 
+	
+	@Before
+	public void setup(){
+		rlRunMgmtService = new RLRunMgmtService();
+		userForm = new UserForm();
+		userForm.setSubAction("addUpdateUser");
+		
+		userRole = new UserRole();
+		
+
+		
+		
+	}
+	
+	
+	@Test
+	public void testForUserRole() {
+		 userRole = rlRunMgmtService.getUserRole("g3uicm");
+		 assertNotNull(userRole);
+	}
+	
+
+	@Test
+	public void testForUiKeys() {
+		 String key="";
+		 assertEquals(key,UIConstants.KEY_USER);
+	}
+	
+	@Test
+	public void testForSubaction() {
+		String subAction = userForm.getSubAction();
+		assertEquals("addUpdateUser",subAction);
+	}
+	
+	@Test        
+	public void testForUpdateRole() {
+		
+		
+		String subAction = userForm.getSubAction();
+		boolean validate = false;
+		if(subAction.equalsIgnoreCase("addUpdateUser")){
+			validate = true;
+		}else{
+			validate = false;
+		}
+		 
+		assertTrue(validate);
+	}
+	
+	@Test        
+	public void testForRevokeRole() {
+		String subAction = "revokeUser";
+		if(subAction.equalsIgnoreCase("revokeUser")){
+			userRole.setActive("N");
+		}else{
+			userRole.setActive("Y");
+		}
+		assertEquals(userRole.getActive() ,"N");
+	}
+
+}
